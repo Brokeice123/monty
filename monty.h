@@ -70,6 +70,7 @@ void sub(stack_t **stack, unsigned int line_number);
 void op_div(stack_t **stack, unsigned int line_number);
 void mul(stack_t **stack, unsigned int line_number);
 void op_mod(stack_t **stack, unsigned int line_number);
+void pchar(stack_t **stack, unsigned int line_number);
 
 /**Execute**/
 int execute(stack_t **stack, char *line, unsigned int line_number, FILE *file);
