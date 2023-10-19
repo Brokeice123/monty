@@ -23,6 +23,7 @@ int execute(stack_t **stack, char *line, unsigned int line_number, FILE *file)
 		{"sub", sub},
 		{"div", op_div},
 		{"mul", mul},
+		{"mod", op_mod},
 		{NULL, NULL}
 	};
 

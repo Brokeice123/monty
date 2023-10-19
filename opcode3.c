@@ -1,44 +1,43 @@
 #include "monty.h"
+
 /**
- * pstr- function that prints the string at top of stack
- * @stack: stack that contains string
- * @line_number: line number
+ * op_mod - performs modulus operation
+ * @stack: double pointer to the stack
+ * @line_number: line number of the file
  */
-void pstr(stack_t **stack, unsigned int line_number)
+
+void op_mod(stack_t **stack, unsigned int line_number)
 {
-	stack_t *current = *stack;
-	char *str = NULL;
-	int str_len = 0;
+	stack_t *tmp;
+	int n;
 
-	while (current != NULL && current->n != 0
-			&& current->n >= 0 && current->n <= 127)
+	if (*stack == NULL || (*stack)->next == NULL)
 	{
-		str_len++;
-		str = realloc(str, str_len);
-		if (str == NULL)
-		{
-			fprintf(stderr, "Error: malloc failed\n");
-			free_stack(*stack);
-			exit(EXIT_FAILURE);
-		}
-		str[str_len - 1] = current->n;
-		current = current->next;
-	}
-
-	str = realloc(str, str_len + 1);
-	if (str == NULL)
-	{
-		fprintf(stderr, "Error: malloc failed\n");
+		fprintf(stderr, "L%d: can't mod, stack too short\n", line_number);
+		fclose(bus.file);
+		free(bus.content);
 		free_stack(*stack);
 		exit(EXIT_FAILURE);
 	}
-	str[str_len] = '\0';
-	if (str_len > 0)
+
+	tmp = *stack;
+
+	if (tmp->next->n == 0)
 	{
-		fprintf(stdout, "%s\n", str);
+		fprintf(stderr, "L%d: division by zero\n", line_number);
+		fclose(bus.file);
+		free(bus.content);
+		free_stack(*stack);
+		exit(EXIT_FAILURE);
 	}
-	free(str);
+
+	n = tmp->next->n % tmp->n;
+	tmp->next->n = n;
+
+	*stack = tmp->next;
+	free(tmp);
 }
+
 
 /**
  * commenting - function that enables monty to comment
@@ -67,4 +66,4 @@ void commenting(char *line, unsigned int line_number, stack_t **stack)
 	{
 		execute_opcode(opcode, stack, line_number);
 	}
-}
+
